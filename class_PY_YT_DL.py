@@ -73,7 +73,7 @@ class PY_YT_DL(customtkinter.CTk):
 
     def open_toplevel(self):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-            self.toplevel_window = Settings_Window(self)  # create window if its None or destroyed
+            self.toplevel_window = Settings_Window(self)
         else:
             self.toplevel_window.focus()
 
@@ -101,7 +101,6 @@ class PY_YT_DL(customtkinter.CTk):
 
                 )
 
-                # Lösche den Inhalt der info_textbox und füge die neue Textzeichenfolge ein
                 self.info_textbox.delete(1.0, customtkinter.END)
                 self.info_textbox.insert(customtkinter.END, info_text)
 
@@ -228,7 +227,6 @@ class PY_YT_DL(customtkinter.CTk):
             self.load_infos()
             path = os.path.join(os.getcwd(), 'downloads')
 
-            # Überprüfe, ob der Ordner existiert, und erstelle ihn gegebenenfalls
             if not os.path.exists(path):
                 os.makedirs(path)
 
