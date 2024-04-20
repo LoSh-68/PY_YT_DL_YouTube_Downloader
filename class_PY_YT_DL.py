@@ -11,7 +11,12 @@ from class_settings import Settings_Window
 from variables import APPNAME
 import tkinterDnD  # pip install python-tkdnd
 import json
-import pywinstyles  # pip install pywinstyles
+
+
+customtkinter.set_ctk_parent_class(tkinterDnD.Tk)
+
+customtkinter.set_appearance_mode("dark")  # Modes: "System" (standard), "Dark", "Light"
+customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
 
 class PY_YT_DL(customtkinter.CTk):
