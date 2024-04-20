@@ -1,7 +1,6 @@
 import customtkinter
 from variables import APPNAME
 
-
 class Settings_Window(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -90,13 +89,13 @@ class Settings_Window(customtkinter.CTkToplevel):
         self.audio_bitrate_combobox.grid(pady=20, padx=20, row=2, column=1)
         self.audio_bitrate_combobox.set("192kbps")
 
-        self.miscellaneous_use_oauth_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="OAUTH:",
+        self.use_oauth_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="OAUTH:",
                                                                     font=("bahnschrift", 15))
-        self.miscellaneous_use_oauth_label.grid(pady=20, padx=20, row=0, column=0)
+        self.use_oauth_label.grid(pady=20, padx=20, row=0, column=0)
 
-        self.miscellaneous_use_oauth_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame, values=["ON", "OFF"])
-        self.miscellaneous_use_oauth_combobox.grid(pady=20, padx=20, row=0, column=1)
-        self.miscellaneous_use_oauth_combobox.set("OFF")
+        self.use_oauth_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame, values=["ON", "OFF"])
+        self.use_oauth_combobox.grid(pady=20, padx=20, row=0, column=1)
+        self.use_oauth_combobox.set("OFF")
 
         self.allow_oauth_cache_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="OAUTH Cache:",
                                                               font=("bahnschrift", 15))
@@ -113,3 +112,20 @@ class Settings_Window(customtkinter.CTkToplevel):
         self.win_sound_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame, values=["ON", "OFF"])
         self.win_sound_combobox.grid(pady=20, padx=20, row=2, column=1)
         self.win_sound_combobox.set("OFF")
+
+        self.theme_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="Theme:")
+        self.theme_label.grid(pady=20, padx=20, row=3, column=0)
+
+        self.theme_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame, values=["mica",
+                                                                                                   "acrylic",
+                                                                                                   "aero",
+                                                                                                   "transparent",
+                                                                                                   "optimised",
+                                                                                                   "win7",
+                                                                                                   "inverse",
+                                                                                                   "native",
+                                                                                                   "popup",
+                                                                                                   "dark",
+                                                                                                   "normal"])
+        self.theme_combobox.grid(pady=20, padx=20, row=3, column=1)
+        self.theme_combobox.set("normal")
