@@ -9,7 +9,8 @@ JSON_DATA = [
     {"id": 6, "name": "audio_filetype", "content": ""},
     {"id": 7, "name": "audio_codec", "content": ""},
     {"id": 8, "name": "audio_bitrate", "content": ""},
-    {"id": 9, "name": "miscellaneous_use_oauth", "content": ""},
+    {"id": 9, "name": "_use_oauth", "content": ""},
     {"id": 10, "name": "allow_oauth_cache", "content": ""},
-    {"id": 11, "name": "win_sound", "content": ""}
+    {"id": 11, "name": "win_sound", "content": ""},
+    {"id": 12, "name": "theme", "content": ""}
 ]
