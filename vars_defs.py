@@ -23,8 +23,7 @@ JSON_DATA = [
 
 def get_json_data():
     if not os.path.exists(SETTINGS_FILE):
-        return None  # Return None or raise an exception if the file doesn't exist
-    else:
-        with open(SETTINGS_FILE, "r") as file:
-            json_data = json.load(file)  # Load JSON data from the file
-            return json_data
+        raise FileNotFoundError(f"Settings file '{SETTINGS_FILE}' not found.")
+    with open(SETTINGS_FILE, "r") as file:
+        json_data = json.load(file)
+    return json_data
