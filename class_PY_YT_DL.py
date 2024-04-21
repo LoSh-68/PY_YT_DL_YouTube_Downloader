@@ -24,6 +24,7 @@ class PY_YT_DL(customtkinter.CTk):
         super().__init__(*args, **kwargs)
         self.toplevel_window = None
         self.title(f"{APPNAME}")
+        self.wm_iconbitmap("PY_YT_DL_ICO.ico")
 
         frame = customtkinter.CTkFrame(master=self)
         frame.grid(row=0, column=0, pady=20, padx=20)
@@ -79,6 +80,7 @@ class PY_YT_DL(customtkinter.CTk):
     def open_toplevel(self):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
             self.toplevel_window = Settings_Window(self)
+
         else:
             self.toplevel_window.focus()
 
@@ -249,3 +251,4 @@ class PY_YT_DL(customtkinter.CTk):
 
         except Exception as e:
             print(f"Ein Fehler ist aufgetreten: {e}")
+

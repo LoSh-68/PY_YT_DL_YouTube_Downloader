@@ -5,6 +5,7 @@ class Settings_Window(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title(f"{APPNAME} - Settings")
+        self.wm_iconbitmap("PY_YT_DL_ICO.ico")
 
         self.settings_label = customtkinter.CTkLabel(self, text="Settings", font=("bahnschrift", 30))
         self.settings_label.grid(row=0, column=0, pady=20, padx=20, columnspan=3)
