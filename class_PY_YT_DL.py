@@ -8,7 +8,7 @@ import customtkinter  # pip install customtkinter
 from CTkMessagebox import CTkMessagebox  # pip install CTkMessagebox
 import re
 from class_settings import Settings_Window
-from variables import APPNAME
+from vars_defs import APPNAME
 import tkinterDnD  # pip install python-tkdnd
 import json
 

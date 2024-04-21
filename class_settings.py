@@ -1,5 +1,6 @@
 import customtkinter
-from variables import APPNAME
+from vars_defs import APPNAME
+
 
 class Settings_Window(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
