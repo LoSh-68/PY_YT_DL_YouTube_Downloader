@@ -2,7 +2,7 @@ import json
 import os
 
 APPNAME = "PY_YT_DL"
-
+DOWNLOAD_FOLDER = "PY_YT_DL_DOWNLOADS"
 SETTINGS_FILE = "settings.json"
 
 JSON_DATA = [

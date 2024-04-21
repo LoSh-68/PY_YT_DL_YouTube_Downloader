@@ -8,7 +8,7 @@ import customtkinter  # pip install customtkinter
 from CTkMessagebox import CTkMessagebox  # pip install CTkMessagebox
 import re
 from class_settings import Settings_Window
-from vars_defs import APPNAME
+from vars_defs import APPNAME, DOWNLOAD_FOLDER
 import tkinterDnD  # pip install python-tkdnd
 import json
 
@@ -120,13 +120,13 @@ class PY_YT_DL(customtkinter.CTk):
                 if self.mp3_mp4_combobox_var.get() == "MP4":
                     video = yt.streams.filter(progressive=True, file_extension='mp4').order_by(
                         'resolution').desc().first()
-                    download_path = os.path.join(os.getcwd(), 'downloads')
+                    download_path = os.path.join(os.getcwd(), DOWNLOAD_FOLDER)
                     video.download(download_path)
                 if self.mp3_mp4_combobox_var.get() == "MP3":
                     mp3_titel = title + ".mp3"
                     # Herunterladen der Audio-only-Datei als MP3
                     audio = yt.streams.filter(only_audio=False).first()
-                    download_path = os.path.join(os.getcwd(), 'downloads')
+                    download_path = os.path.join(os.getcwd(), DOWNLOAD_FOLDER)
                     audio.download(output_path=download_path, filename=mp3_titel)
 
 
