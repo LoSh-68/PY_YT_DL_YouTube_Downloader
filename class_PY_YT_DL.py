@@ -29,7 +29,7 @@ class PY_YT_DL(customtkinter.CTk):
         frame = customtkinter.CTkFrame(master=self)
         frame.grid(row=0, column=0, pady=20, padx=20)
 
-        header_image_ctk = customtkinter.CTkImage(dark_image=(Image.open("yt_logo.png")), size=(500, 150))
+        header_image_ctk = customtkinter.CTkImage(dark_image=(Image.open("yt_logo_light_blue.png")), size=(500, 150))
         header_image = customtkinter.CTkLabel(frame, text="")
         header_image.configure(image=header_image_ctk)
         header_image.grid(row=0, column=0, pady=2, padx=2)
