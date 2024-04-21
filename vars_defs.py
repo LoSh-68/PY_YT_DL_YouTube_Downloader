@@ -4,7 +4,7 @@ import os
 APPNAME = "PY_YT_DL"
 DOWNLOAD_FOLDER = "PY_YT_DL_DOWNLOADS"
 SETTINGS_FILE = "settings.json"
-tes = "asdasdas"
+
 
 JSON_DATA = [
     {"id": 1, "name": "video_resolution", "content": ""},
