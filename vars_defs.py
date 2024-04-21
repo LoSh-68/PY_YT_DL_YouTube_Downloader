@@ -1,5 +1,10 @@
+import json
+import os
+
 APPNAME = "PY_YT_DL"
+
 SETTINGS_FILE = "settings.json"
+
 JSON_DATA = [
     {"id": 1, "name": "video_resolution", "content": ""},
     {"id": 2, "name": "video_filetype", "content": ""},
@@ -14,3 +19,12 @@ JSON_DATA = [
     {"id": 11, "name": "win_sound", "content": ""},
     {"id": 12, "name": "theme", "content": ""}
 ]
+
+
+def get_json_data():
+    if not os.path.exists(SETTINGS_FILE):
+        return None  # Return None or raise an exception if the file doesn't exist
+    else:
+        with open(SETTINGS_FILE, "r") as file:
+            json_data = json.load(file)  # Load JSON data from the file
+            return json_data
