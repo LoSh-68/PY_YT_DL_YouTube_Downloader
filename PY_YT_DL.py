@@ -11,6 +11,7 @@ from vars_defs import APPNAME, DOWNLOAD_FOLDER, JSON_DATA, SETTINGS_FILE, get_js
 import pywinstyles
 import tkinterDnD  # pip install python-tkdnd
 import json
+import winsound
 
 customtkinter.set_ctk_parent_class(tkinterDnD.Tk)
 
@@ -23,7 +24,8 @@ class PY_YT_DL(customtkinter.CTk):
         super().__init__(*args, **kwargs)
         self.toplevel_window = None
         self.title(f"{APPNAME}")
-        self.wm_iconbitmap("PY_YT_DL_ICO.ico")
+        self.wm_iconbitmap("PY_YT_DL.ico")
+        self.set_settings()
 
         frame = customtkinter.CTkFrame(master=self)
         frame.grid(row=0, column=0, pady=20, padx=20)
@@ -120,17 +122,29 @@ class PY_YT_DL(customtkinter.CTk):
                     video = yt.streams.filter(progressive=True, file_extension='mp4').order_by(
                         'resolution').desc().first()
                     download_path = os.path.join(os.getcwd(), DOWNLOAD_FOLDER)
-                    video.download(download_path)
+                    file_path = os.path.join(download_path, title + ".mp4")
+
+                    if os.path.exists(file_path):
+                        CTkMessagebox(title=f"{APPNAME} - Info", message=f"Info\n{title}.mp4 already exists.")
+                    else:
+                        video.download(download_path)
+                        winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
                 if self.mp3_mp4_combobox_var.get() == "MP3":
                     mp3_titel = title + ".mp3"
-                    # Herunterladen der Audio-only-Datei als MP3
                     audio = yt.streams.filter(only_audio=False).first()
                     download_path = os.path.join(os.getcwd(), DOWNLOAD_FOLDER)
-                    audio.download(output_path=download_path, filename=mp3_titel)
+                    file_path = os.path.join(download_path, title + ".mp3")
 
+                    if os.path.exists(file_path):
+                        CTkMessagebox(title=f"{APPNAME} - Info", message=f"Info\n{title}.mp3 already exists.")
+                    else:
+                        audio.download(output_path=download_path, filename=mp3_titel)
+                        winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
 
             except Exception as e:
-                print(e)
+                CTkMessagebox(title=f"{APPNAME} - Error\n"
+                                    f"Error:\n"
+                                    f"{e}")
 
         thread = threading.Thread(target=download)
         thread.start()
@@ -251,6 +265,14 @@ class PY_YT_DL(customtkinter.CTk):
         except Exception as e:
             print(f"Ein Fehler ist aufgetreten: {e}")
 
+    def set_settings(self):
+        json_data = get_json_data()
+        for item in json_data:
+            if item["id"] == 9:
+                set_theme = item["content"]  # Assign set_theme here
+                break
+        pywinstyles.apply_style(PY_YT_DL, style=f"{set_theme}")
+
 
 class Settings_Window(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
@@ -298,21 +320,6 @@ class Settings_Window(customtkinter.CTkToplevel):
         self.video_filetype_combobox.grid(pady=20, padx=20, row=1, column=1)
         self.video_filetype_combobox.set("MP4")
 
-        self.video_fps_label = customtkinter.CTkLabel(self.frame_video_settings, text="FPS:", font=("bahnschrift", 15))
-        self.video_fps_label.grid(pady=20, padx=20, row=2, column=0)
-
-        self.video_fps_combobox = customtkinter.CTkComboBox(self.frame_video_settings, values=["30fps", "60fps"])
-        self.video_fps_combobox.grid(pady=20, padx=20, row=2, column=1)
-        self.video_fps_combobox.set("60fps")
-
-        self.video_codec_label = customtkinter.CTkLabel(self.frame_video_settings, text="Video Codec:",
-                                                        font=("bahnschrift", 15))
-        self.video_codec_label.grid(pady=20, padx=20, row=3, column=0)
-
-        self.video_codec_combobox = customtkinter.CTkComboBox(self.frame_video_settings, values=["MPEG", "FFmpeg"])
-        self.video_codec_combobox.grid(pady=20, padx=20, row=3, column=1)
-        self.video_codec_combobox.set("MPEG")
-
         self.video_bitrate_label = customtkinter.CTkLabel(self.frame_video_settings, text="Bitrate:",
                                                           font=("bahnschrift", 15))
         self.video_bitrate_label.grid(pady=20, padx=20, row=4, column=0)
@@ -328,13 +335,6 @@ class Settings_Window(customtkinter.CTkToplevel):
         self.audio_filetype_combobox = customtkinter.CTkComboBox(self.frame_audio_settings, values=["MP3", "WAV"])
         self.audio_filetype_combobox.grid(pady=20, padx=20, row=0, column=1)
         self.audio_filetype_combobox.set("MP3")
-
-        self.audio_codec_label = customtkinter.CTkLabel(self.frame_audio_settings, text="Codec:",
-                                                        font=("bahnschrift", 15))
-        self.audio_codec_label.grid(pady=20, padx=20, row=1, column=0)
-
-        self.audio_codec_combobox = customtkinter.CTkComboBox(self.frame_audio_settings, values=["N/A"])
-        self.audio_codec_combobox.grid(pady=20, padx=20, row=1, column=1)
 
         self.audio_bitrate_label = customtkinter.CTkLabel(self.frame_audio_settings, text="Bitrate:",
                                                           font=("bahnschrift", 15))
@@ -389,11 +389,7 @@ class Settings_Window(customtkinter.CTkToplevel):
     def dump_json(self):
         pass
 
-    def set_settings(self):
-        pass
-
     def on_closing(self):
-        print("hure")
         self.change_theme()
         Settings_Window.destroy(self)
 
@@ -401,7 +397,7 @@ class Settings_Window(customtkinter.CTkToplevel):
         data = get_json_data()
         set_theme = self.theme_combobox.get()
         for item in data:
-            if item["id"] == 12:
+            if item["id"] == 9:
                 item["content"] = set_theme
                 break
         pywinstyles.apply_style(Settings_Window, style=f"{set_theme}")
