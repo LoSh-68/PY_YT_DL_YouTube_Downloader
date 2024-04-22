@@ -98,7 +98,7 @@ class PY_YT_DL(customtkinter.CTk):
                 return
 
             try:
-                yt = YouTube(url, on_progress_callback=self.progressbar)
+                yt = YouTube(url, on_progress_callback=self.progressbar, use_oauth=True, allow_oauth_cache=True)
                 title = yt.title
 
                 info_text = (
@@ -143,9 +143,9 @@ class PY_YT_DL(customtkinter.CTk):
                         winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
 
             except Exception as e:
-                CTkMessagebox(title=f"{APPNAME} - Error\n"
-                                    f"Error:\n"
+                CTkMessagebox(title=f"{APPNAME} - Error", message=f"Error:\n"
                                     f"{e}")
+
 
         thread = threading.Thread(target=download)
         thread.start()
