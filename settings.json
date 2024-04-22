@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "name": "use_oauth",
+        "content": "ON"
+    },
+    {
+        "id": 2,
+        "name": "allow_oauth_cache",
+        "content": "ON"
+    },
+    {
+        "id": 3,
+        "name": "win_sound",
+        "content": "ON"
+    },
+    {
+        "id": 4,
+        "name": "theme",
+        "content": "dark"
+    }
+]
