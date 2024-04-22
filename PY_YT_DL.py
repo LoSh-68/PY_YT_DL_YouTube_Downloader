@@ -278,7 +278,7 @@ class Settings_Window(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title(f"{APPNAME} - Settings")
-        self.wm_iconbitmap("PY_YT_DL_ICO.ico")
+        self.wm_iconbitmap("PY_YT_DL.ico")
         self.wm_protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.settings_label = customtkinter.CTkLabel(self, text="Settings", font=("bahnschrift", 30))
@@ -384,12 +384,41 @@ class Settings_Window(customtkinter.CTkToplevel):
                                                                                                    "dark",
                                                                                                    "normal"])
         self.theme_combobox.grid(pady=20, padx=20, row=3, column=1)
-        self.theme_combobox.set("normal")
-
-    def dump_json(self):
-        pass
+        self.theme_combobox.set("dark")
 
     def on_closing(self):
+        data = get_json_data()
+        vid_res = self.video_resolution_combobox.get()
+        vid_file_type = self.video_filetype_combobox.get()
+        vid_bitrate = self.video_bitrate_combobox.get()
+        aud_file_type = self.audio_filetype_combobox.get()
+        aud_bitrate = self.audio_bitrate_combobox.get()
+        oauth = self.use_oauth_combobox.get()
+        oauth_cache = self.allow_oauth_cache_combobox.get()
+        win_sound = self.win_sound_combobox.get()
+        theme = self.theme_combobox.get()
+        for item in data:
+            if item["id"] == 1:
+                item["content"] = vid_res
+            if item["id"] == 2:
+                item["content"] = vid_file_type
+            if item["id"] == 3:
+                item["content"] = vid_bitrate
+            if item["id"] == 4:
+                item["content"] = aud_file_type
+            if item["id"] == 5:
+                item["content"] = aud_bitrate
+            if item["id"] == 6:
+                item["content"] = oauth
+            if item["id"] == 7:
+                item["content"] = oauth_cache
+            if item["id"] == 8:
+                item["content"] = win_sound
+            if item["id"] == 9:
+                item["content"] = theme
+                break
+            with open(SETTINGS_FILE, "w") as json_file:
+                json.dump(data, json_file, indent=4)
         self.change_theme()
         Settings_Window.destroy(self)
 
