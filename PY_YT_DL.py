@@ -12,6 +12,7 @@ import pywinstyles
 import tkinterDnD  # pip install python-tkdnd
 import json
 import winsound
+import sys
 
 customtkinter.set_ctk_parent_class(tkinterDnD.Tk)
 
@@ -77,6 +78,12 @@ class PY_YT_DL(customtkinter.CTk):
 
         self.settings_button = customtkinter.CTkButton(frame, text="Settings", command=self.open_toplevel)
         self.settings_button.grid(row=5, column=1)
+
+        self.console_label = customtkinter.CTkLabel(frame, text="")
+        self.console_label.grid()
+        redirect_stdout_to_label(self.console_label)
+
+
 
     def open_toplevel(self):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
@@ -144,8 +151,7 @@ class PY_YT_DL(customtkinter.CTk):
 
             except Exception as e:
                 CTkMessagebox(title=f"{APPNAME} - Error", message=f"Error:\n"
-                                    f"{e}")
-
+                                                                  f"{e}")
 
         thread = threading.Thread(target=download)
         thread.start()
@@ -366,6 +372,18 @@ class Settings_Window(customtkinter.CTkToplevel):
         pywinstyles.apply_style(PY_YT_DL, style=f"{set_theme}")
         with open(SETTINGS_FILE, "w") as json_file:
             json.dump(data, json_file, indent=4)
+
+
+def redirect_stdout_to_label(label):
+    class StdoutRedirector:
+        def write(self, text):
+            label.configure(text=label.cget("text") + text)
+
+        def flush(self):
+            pass
+
+    sys.stdout = StdoutRedirector()
+
 
 
 if not os.path.exists(SETTINGS_FILE):
