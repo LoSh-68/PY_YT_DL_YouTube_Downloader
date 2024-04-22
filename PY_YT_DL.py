@@ -92,6 +92,7 @@ class PY_YT_DL(customtkinter.CTk):
 
         def download():
             url = self.url_entry.get()
+
             if url == "":
                 msg_box_error()
                 return
@@ -263,12 +264,12 @@ class PY_YT_DL(customtkinter.CTk):
                 msg_box_success()
 
         except Exception as e:
-            print(f"Ein Fehler ist aufgetreten: {e}")
+            print(f"Error: {e}")
 
     def set_settings(self):
         json_data = get_json_data()
         for item in json_data:
-            if item["id"] == 9:
+            if item["id"] == 4:
                 set_theme = item["content"]  # Assign set_theme here
                 break
         pywinstyles.apply_style(PY_YT_DL, style=f"{set_theme}")
@@ -284,65 +285,11 @@ class Settings_Window(customtkinter.CTkToplevel):
         self.settings_label = customtkinter.CTkLabel(self, text="Settings", font=("bahnschrift", 30))
         self.settings_label.grid(row=0, column=0, pady=20, padx=20, columnspan=3)
 
-        self.video_settings = customtkinter.CTkLabel(self, text="Video", font=("bahnschrift", 20))
-        self.video_settings.grid(row=1, column=0, pady=20, padx=20)
-
-        self.audio_settings = customtkinter.CTkLabel(self, text="Audio", font=("bahnschrift", 20))
-        self.audio_settings.grid(row=1, column=1, pady=20, padx=20)
-
         self.miscellaneous_settings = customtkinter.CTkLabel(self, text="Miscellaneous", font=("bahnschrift", 20))
         self.miscellaneous_settings.grid(row=1, column=2, pady=20, padx=20)
 
-        self.frame_video_settings = customtkinter.CTkFrame(self, width=500, height=400, corner_radius=40)
-        self.frame_video_settings.grid(pady=20, padx=20, sticky="n", row=3, column=0)
-
-        self.frame_audio_settings = customtkinter.CTkFrame(self, width=500, height=400, corner_radius=40)
-        self.frame_audio_settings.grid(pady=20, padx=20, sticky="n", row=3, column=1)
-
         self.miscellaneous_settings_frame = customtkinter.CTkFrame(self, width=500, height=400, corner_radius=40)
         self.miscellaneous_settings_frame.grid(pady=20, padx=20, sticky="n", row=3, column=2)
-
-        self.video_resolution_label = customtkinter.CTkLabel(self.frame_video_settings, text="Resolution:",
-                                                             font=("bahnschrift", 15))
-        self.video_resolution_label.grid(pady=20, padx=20, row=0, column=0)
-
-        self.video_resolution_combobox = customtkinter.CTkComboBox(self.frame_video_settings,
-                                                                   values=["Best", "720p", "480p", "360p", "240p",
-                                                                           "144p"])
-        self.video_resolution_combobox.grid(pady=20, padx=20, row=0, column=1)
-        self.video_resolution_combobox.set("Best")
-
-        self.video_filetype_label = customtkinter.CTkLabel(self.frame_video_settings, text="Filetype:",
-                                                           font=("bahnschrift", 15))
-        self.video_filetype_label.grid(pady=20, padx=20, row=1, column=0)
-
-        self.video_filetype_combobox = customtkinter.CTkComboBox(self.frame_video_settings, values=["MP4", "MOV"])
-        self.video_filetype_combobox.grid(pady=20, padx=20, row=1, column=1)
-        self.video_filetype_combobox.set("MP4")
-
-        self.video_bitrate_label = customtkinter.CTkLabel(self.frame_video_settings, text="Bitrate:",
-                                                          font=("bahnschrift", 15))
-        self.video_bitrate_label.grid(pady=20, padx=20, row=4, column=0)
-
-        self.video_bitrate_combobox = customtkinter.CTkComboBox(self.frame_video_settings, values=["64kbps", "192kbps"])
-        self.video_bitrate_combobox.grid(pady=20, padx=20, row=4, column=1)
-        self.video_bitrate_combobox.set("192kbps")
-
-        self.audio_filetype_label = customtkinter.CTkLabel(self.frame_audio_settings, text="Filetype:",
-                                                           font=("bahnschrift", 15))
-        self.audio_filetype_label.grid(pady=20, padx=20, row=0, column=0)
-
-        self.audio_filetype_combobox = customtkinter.CTkComboBox(self.frame_audio_settings, values=["MP3", "WAV"])
-        self.audio_filetype_combobox.grid(pady=20, padx=20, row=0, column=1)
-        self.audio_filetype_combobox.set("MP3")
-
-        self.audio_bitrate_label = customtkinter.CTkLabel(self.frame_audio_settings, text="Bitrate:",
-                                                          font=("bahnschrift", 15))
-        self.audio_bitrate_label.grid(pady=20, padx=20, row=2, column=0)
-
-        self.audio_bitrate_combobox = customtkinter.CTkComboBox(self.frame_audio_settings, values=["64kbps", "192kbps"])
-        self.audio_bitrate_combobox.grid(pady=20, padx=20, row=2, column=1)
-        self.audio_bitrate_combobox.set("192kbps")
 
         self.use_oauth_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="OAUTH:",
                                                       font=("bahnschrift", 15))
@@ -388,33 +335,19 @@ class Settings_Window(customtkinter.CTkToplevel):
 
     def on_closing(self):
         data = get_json_data()
-        vid_res = self.video_resolution_combobox.get()
-        vid_file_type = self.video_filetype_combobox.get()
-        vid_bitrate = self.video_bitrate_combobox.get()
-        aud_file_type = self.audio_filetype_combobox.get()
-        aud_bitrate = self.audio_bitrate_combobox.get()
         oauth = self.use_oauth_combobox.get()
         oauth_cache = self.allow_oauth_cache_combobox.get()
         win_sound = self.win_sound_combobox.get()
         theme = self.theme_combobox.get()
         for item in data:
+
             if item["id"] == 1:
-                item["content"] = vid_res
-            if item["id"] == 2:
-                item["content"] = vid_file_type
-            if item["id"] == 3:
-                item["content"] = vid_bitrate
-            if item["id"] == 4:
-                item["content"] = aud_file_type
-            if item["id"] == 5:
-                item["content"] = aud_bitrate
-            if item["id"] == 6:
                 item["content"] = oauth
-            if item["id"] == 7:
+            if item["id"] == 2:
                 item["content"] = oauth_cache
-            if item["id"] == 8:
+            if item["id"] == 3:
                 item["content"] = win_sound
-            if item["id"] == 9:
+            if item["id"] == 4:
                 item["content"] = theme
                 break
             with open(SETTINGS_FILE, "w") as json_file:
@@ -426,7 +359,7 @@ class Settings_Window(customtkinter.CTkToplevel):
         data = get_json_data()
         set_theme = self.theme_combobox.get()
         for item in data:
-            if item["id"] == 9:
+            if item["id"] == 4:
                 item["content"] = set_theme
                 break
         pywinstyles.apply_style(Settings_Window, style=f"{set_theme}")

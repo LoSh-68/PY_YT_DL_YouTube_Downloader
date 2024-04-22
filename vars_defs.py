@@ -7,15 +7,10 @@ SETTINGS_FILE = "settings.json"
 
 
 JSON_DATA = [
-    {"id": 1, "name": "video_resolution", "content": ""},
-    {"id": 2, "name": "video_filetype", "content": ""},
-    {"id": 3, "name": "video_bitrate", "content": ""},
-    {"id": 4, "name": "audio_filetype", "content": ""},
-    {"id": 5, "name": "audio_bitrate", "content": ""},
-    {"id": 6, "name": "_use_oauth", "content": ""},
-    {"id": 7, "name": "allow_oauth_cache", "content": ""},
-    {"id": 8, "name": "win_sound", "content": ""},
-    {"id": 9, "name": "theme", "content": ""}
+    {"id": 1, "name": "use_oauth", "content": "OFF"},
+    {"id": 2, "name": "allow_oauth_cache", "content": "OFF"},
+    {"id": 3, "name": "win_sound", "content": "OFF"},
+    {"id": 4, "name": "theme", "content": "dark"}
 ]
 
 
