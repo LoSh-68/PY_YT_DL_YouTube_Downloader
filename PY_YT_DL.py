@@ -112,8 +112,6 @@ class PY_YT_DL(customtkinter.CTk):
                 yt = YouTube(url, on_progress_callback=self.progressbar, use_oauth=use_oauth_bool,
                              allow_oauth_cache=oauth_cache_bool)
                 title = yt.title
-                print(use_oauth_bool)
-                print(oauth_cache_bool)
 
                 info_text = (
                     f"Title:\n    {title}\n\n"
@@ -381,7 +379,6 @@ class Settings_Window(customtkinter.CTkToplevel):
         Settings_Window.destroy(self)
 
     def on_opening(self):
-        print("hure")
         data = get_json_data()
         for item in data:
 
