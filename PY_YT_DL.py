@@ -4,15 +4,14 @@ import requests
 from PIL import Image
 from io import BytesIO
 import threading
-import customtkinter  # pip install customtkinter
-from CTkMessagebox import CTkMessagebox  # pip install CTkMessagebox
+import customtkinter
+from CTkMessagebox import CTkMessagebox
 import re
 from vars_defs import APPNAME, DOWNLOAD_FOLDER, JSON_DATA, SETTINGS_FILE, get_json_data
 import pywinstyles
-import tkinterDnD  # pip install python-tkdnd
+import tkinterDnD
 import json
 import winsound
-import sys
 
 customtkinter.set_ctk_parent_class(tkinterDnD.Tk)
 
@@ -51,7 +50,7 @@ class PY_YT_DL(customtkinter.CTk):
         mp3_mp4_combobox.grid(row=4, column=0, pady=2, padx=2)
         self.mp3_mp4_combobox_var.set("MP4")
 
-        download_button = customtkinter.CTkButton(frame, text="Download", command=self.download_video)
+        download_button = customtkinter.CTkButton(frame, text="Download", command=self.download_video_audio)
         download_button.grid(row=5, column=0, pady=20, padx=20)
 
         load_button = customtkinter.CTkButton(frame, text="Load Infos", command=self.load_infos)
@@ -79,12 +78,6 @@ class PY_YT_DL(customtkinter.CTk):
         self.settings_button = customtkinter.CTkButton(frame, text="Settings", command=self.open_toplevel)
         self.settings_button.grid(row=5, column=1)
 
-        self.console_label = customtkinter.CTkLabel(frame, text="")
-        self.console_label.grid()
-        redirect_stdout_to_label(self.console_label)
-
-
-
     def open_toplevel(self):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
             self.toplevel_window = Settings_Window(self)
@@ -92,7 +85,7 @@ class PY_YT_DL(customtkinter.CTk):
         else:
             self.toplevel_window.focus()
 
-    def download_video(self):
+    def download_video_audio(self):
         def msg_box_error():
             CTkMessagebox(title=f"{APPNAME} - Error", message=f"Error\n"
                                                               f"Pleas enter a valid URL first.", icon="warning")
@@ -105,7 +98,7 @@ class PY_YT_DL(customtkinter.CTk):
                 return
 
             try:
-                yt = YouTube(url, on_progress_callback=self.progressbar, use_oauth=True, allow_oauth_cache=True)
+                yt = YouTube(url, on_progress_callback=self.progressbar, use_oauth=False, allow_oauth_cache=True)
                 title = yt.title
 
                 info_text = (
@@ -134,9 +127,11 @@ class PY_YT_DL(customtkinter.CTk):
 
                     if os.path.exists(file_path):
                         CTkMessagebox(title=f"{APPNAME} - Info", message=f"Info\n{title}.mp4 already exists.")
+                        print(f"hallo")
                     else:
                         video.download(download_path)
                         winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
+                        print("tschüss")
                 if self.mp3_mp4_combobox_var.get() == "MP3":
                     mp3_titel = title + ".mp3"
                     audio = yt.streams.filter(only_audio=False).first()
@@ -145,13 +140,16 @@ class PY_YT_DL(customtkinter.CTk):
 
                     if os.path.exists(file_path):
                         CTkMessagebox(title=f"{APPNAME} - Info", message=f"Info\n{title}.mp3 already exists.")
+                        print(f"hallo")
                     else:
                         audio.download(output_path=download_path, filename=mp3_titel)
                         winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
+                        print("tschüss")
 
             except Exception as e:
                 CTkMessagebox(title=f"{APPNAME} - Error", message=f"Error:\n"
                                                                   f"{e}")
+                print(e)
 
         thread = threading.Thread(target=download)
         thread.start()
@@ -372,18 +370,6 @@ class Settings_Window(customtkinter.CTkToplevel):
         pywinstyles.apply_style(PY_YT_DL, style=f"{set_theme}")
         with open(SETTINGS_FILE, "w") as json_file:
             json.dump(data, json_file, indent=4)
-
-
-def redirect_stdout_to_label(label):
-    class StdoutRedirector:
-        def write(self, text):
-            label.configure(text=label.cget("text") + text)
-
-        def flush(self):
-            pass
-
-    sys.stdout = StdoutRedirector()
-
 
 
 if not os.path.exists(SETTINGS_FILE):

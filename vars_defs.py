@@ -7,7 +7,7 @@ SETTINGS_FILE = "settings.json"
 
 
 JSON_DATA = [
-    {"id": 1, "name": "use_oauth", "content": "OFF"},
+    {"id": 1, "name": "use_oauth", "content": "OFFü"},
     {"id": 2, "name": "allow_oauth_cache", "content": "OFF"},
     {"id": 3, "name": "win_sound", "content": "OFF"},
     {"id": 4, "name": "theme", "content": "dark"}
