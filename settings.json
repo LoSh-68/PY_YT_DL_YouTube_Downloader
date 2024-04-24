@@ -2,21 +2,21 @@
     {
         "id": 1,
         "name": "use_oauth",
-        "content": "ON"
+        "content": "False"
     },
     {
         "id": 2,
         "name": "allow_oauth_cache",
-        "content": "ON"
+        "content": "True"
     },
     {
         "id": 3,
         "name": "win_sound",
-        "content": "ON"
+        "content": "False"
     },
     {
         "id": 4,
         "name": "theme",
-        "content": "dark"
+        "content": "win7"
     }
 ]

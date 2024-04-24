@@ -81,7 +81,6 @@ class PY_YT_DL(customtkinter.CTk):
     def open_toplevel(self):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
             self.toplevel_window = Settings_Window(self)
-
         else:
             self.toplevel_window.focus()
 
@@ -91,6 +90,7 @@ class PY_YT_DL(customtkinter.CTk):
                                                               f"Pleas enter a valid URL first.", icon="warning")
 
         def download():
+            global use_oauth_bool, oauth_cache_bool
             url = self.url_entry.get()
 
             if url == "":
@@ -98,8 +98,18 @@ class PY_YT_DL(customtkinter.CTk):
                 return
 
             try:
-                yt = YouTube(url, on_progress_callback=self.progressbar, use_oauth=False, allow_oauth_cache=True)
+                data = get_json_data()
+                for item in data:
+                    if item["id"] == 1:
+                        use_oauth_bool = item["content"].lower() == "true"
+                for item in data:
+                    if item["id"] == 2:
+                        oauth_cache_bool = item["content"].lower() == "true"
+                yt = YouTube(url, on_progress_callback=self.progressbar, use_oauth=use_oauth_bool,
+                             allow_oauth_cache=oauth_cache_bool)
                 title = yt.title
+                print(use_oauth_bool)
+                print(oauth_cache_bool)
 
                 info_text = (
                     f"Title:\n    {title}\n\n"
@@ -274,68 +284,73 @@ class PY_YT_DL(customtkinter.CTk):
         json_data = get_json_data()
         for item in json_data:
             if item["id"] == 4:
-                set_theme = item["content"]  # Assign set_theme here
+                set_theme = item["content"]
                 break
         pywinstyles.apply_style(PY_YT_DL, style=f"{set_theme}")
 
 
 class Settings_Window(customtkinter.CTkToplevel):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs, ):
         super().__init__(*args, **kwargs)
         self.title(f"{APPNAME} - Settings")
         self.wm_iconbitmap("PY_YT_DL.ico")
+
+
         self.wm_protocol("WM_DELETE_WINDOW", self.on_closing)
+
 
         self.settings_label = customtkinter.CTkLabel(self, text="Settings", font=("bahnschrift", 30))
         self.settings_label.grid(row=0, column=0, pady=20, padx=20, columnspan=3)
 
-        self.miscellaneous_settings = customtkinter.CTkLabel(self, text="Miscellaneous", font=("bahnschrift", 20))
-        self.miscellaneous_settings.grid(row=1, column=2, pady=20, padx=20)
-
         self.miscellaneous_settings_frame = customtkinter.CTkFrame(self, width=500, height=400, corner_radius=40)
-        self.miscellaneous_settings_frame.grid(pady=20, padx=20, sticky="n", row=3, column=2)
+        self.miscellaneous_settings_frame.grid(pady=20, padx=20, sticky="n", row=1, column=2)
 
         self.use_oauth_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="OAUTH:",
                                                       font=("bahnschrift", 15))
         self.use_oauth_label.grid(pady=20, padx=20, row=0, column=0)
 
-        self.use_oauth_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame, values=["ON", "OFF"])
+        self.use_oauth_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame, values=["False", "True"],
+                                                            corner_radius=20)
         self.use_oauth_combobox.grid(pady=20, padx=20, row=0, column=1)
-        self.use_oauth_combobox.set("OFF")
+        self.use_oauth_combobox.set("False")
 
         self.allow_oauth_cache_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="OAUTH Cache:",
                                                               font=("bahnschrift", 15))
         self.allow_oauth_cache_label.grid(pady=20, padx=20, row=1, column=0)
 
         self.allow_oauth_cache_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame,
-                                                                    values=["ON", "OFF"])
+                                                                    values=["False", "True"], corner_radius=20)
         self.allow_oauth_cache_combobox.grid(pady=20, padx=20, row=1, column=1)
-        self.allow_oauth_cache_combobox.set("OFF")
+        self.allow_oauth_cache_combobox.set("False")
 
         self.win_sound_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="Win Sound",
                                                       font=("bahnschrift", 15))
         self.win_sound_label.grid(pady=20, padx=20, row=2, column=0)
 
-        self.win_sound_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame, values=["ON", "OFF"])
+        self.win_sound_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame, values=["False", "True"],
+                                                            corner_radius=20)
         self.win_sound_combobox.grid(pady=20, padx=20, row=2, column=1)
-        self.win_sound_combobox.set("OFF")
+        self.win_sound_combobox.set("False")
 
-        self.theme_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="Theme:")
+        self.theme_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="Theme:",
+                                                  font=("bahnschrift", 15))
         self.theme_label.grid(pady=20, padx=20, row=3, column=0)
 
-        self.theme_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame, values=["mica",
-                                                                                                   "acrylic",
-                                                                                                   "aero",
-                                                                                                   "transparent",
-                                                                                                   "optimised",
-                                                                                                   "win7",
-                                                                                                   "inverse",
-                                                                                                   "native",
-                                                                                                   "popup",
-                                                                                                   "dark",
-                                                                                                   "normal"])
+        self.theme_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame, corner_radius=20,
+                                                        values=["mica",
+                                                                "acrylic",
+                                                                "aero",
+                                                                "transparent",
+                                                                "optimised",
+                                                                "win7",
+                                                                "inverse",
+                                                                "native",
+                                                                "popup",
+                                                                "dark",
+                                                                "normal"])
         self.theme_combobox.grid(pady=20, padx=20, row=3, column=1)
         self.theme_combobox.set("dark")
+        self.on_opening()
 
     def on_closing(self):
         data = get_json_data()
@@ -343,6 +358,7 @@ class Settings_Window(customtkinter.CTkToplevel):
         oauth_cache = self.allow_oauth_cache_combobox.get()
         win_sound = self.win_sound_combobox.get()
         theme = self.theme_combobox.get()
+
         for item in data:
 
             if item["id"] == 1:
@@ -359,6 +375,25 @@ class Settings_Window(customtkinter.CTkToplevel):
         self.change_theme()
         Settings_Window.destroy(self)
 
+    def on_opening(self):
+        print("hure")
+        data = get_json_data()
+        for item in data:
+
+            if item["id"] == 1:
+                oauth = item["content"]
+            if item["id"] == 2:
+                oauth_cache = item["content"]
+            if item["id"] == 3:
+                win_sound = item["content"]
+            if item["id"] == 4:
+                theme = item["content"]
+                break
+        self.use_oauth_combobox.set(f"{oauth}")
+        self.allow_oauth_cache_combobox.set(oauth_cache)
+        self.win_sound_combobox.set(win_sound)
+        self.theme_combobox.set(theme)
+
     def change_theme(self):
         data = get_json_data()
         set_theme = self.theme_combobox.get()
@@ -370,6 +405,7 @@ class Settings_Window(customtkinter.CTkToplevel):
         pywinstyles.apply_style(PY_YT_DL, style=f"{set_theme}")
         with open(SETTINGS_FILE, "w") as json_file:
             json.dump(data, json_file, indent=4)
+
 
 
 if not os.path.exists(SETTINGS_FILE):
