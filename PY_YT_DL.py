@@ -90,7 +90,7 @@ class PY_YT_DL(customtkinter.CTk):
                                                               f"Pleas enter a valid URL first.", icon="warning")
 
         def download():
-            global use_oauth_bool, oauth_cache_bool
+            global use_oauth_bool, oauth_cache_bool, win_sound
             url = self.url_entry.get()
 
             if url == "":
@@ -105,6 +105,10 @@ class PY_YT_DL(customtkinter.CTk):
                 for item in data:
                     if item["id"] == 2:
                         oauth_cache_bool = item["content"].lower() == "true"
+                for item in data:
+                    if item["id"] == 3:
+                        win_sound = item["content"]
+                        break
                 yt = YouTube(url, on_progress_callback=self.progressbar, use_oauth=use_oauth_bool,
                              allow_oauth_cache=oauth_cache_bool)
                 title = yt.title
@@ -137,24 +141,27 @@ class PY_YT_DL(customtkinter.CTk):
 
                     if os.path.exists(file_path):
                         CTkMessagebox(title=f"{APPNAME} - Info", message=f"Info\n{title}.mp4 already exists.")
-                        print(f"hallo")
-                    else:
+                        return
+                    if win_sound == "True":
                         video.download(download_path)
                         winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
-                        print("tschüss")
+                    else:
+                        video.download(download_path)
+
                 if self.mp3_mp4_combobox_var.get() == "MP3":
                     mp3_titel = title + ".mp3"
-                    audio = yt.streams.filter(only_audio=False).first()
+                    audio = yt.streams.filter(only_audio=True).first()
                     download_path = os.path.join(os.getcwd(), DOWNLOAD_FOLDER)
                     file_path = os.path.join(download_path, title + ".mp3")
 
                     if os.path.exists(file_path):
                         CTkMessagebox(title=f"{APPNAME} - Info", message=f"Info\n{title}.mp3 already exists.")
-                        print(f"hallo")
-                    else:
+                        return
+                    if win_sound == "True":
                         audio.download(output_path=download_path, filename=mp3_titel)
                         winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
-                        print("tschüss")
+                    else:
+                        audio.download(output_path=download_path, filename=mp3_titel)
 
             except Exception as e:
                 CTkMessagebox(title=f"{APPNAME} - Error", message=f"Error:\n"

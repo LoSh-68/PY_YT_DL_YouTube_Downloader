@@ -7,16 +7,16 @@
     {
         "id": 2,
         "name": "allow_oauth_cache",
-        "content": "True"
+        "content": "False"
     },
     {
         "id": 3,
         "name": "win_sound",
-        "content": "False"
+        "content": "True"
     },
     {
         "id": 4,
         "name": "theme",
-        "content": "win7"
+        "content": "dark"
     }
 ]
