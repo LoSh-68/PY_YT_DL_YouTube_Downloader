@@ -302,9 +302,7 @@ class Settings_Window(customtkinter.CTkToplevel):
         self.title(f"{APPNAME} - Settings")
         self.wm_iconbitmap("PY_YT_DL.ico")
 
-
         self.wm_protocol("WM_DELETE_WINDOW", self.on_closing)
-
 
         self.settings_label = customtkinter.CTkLabel(self, text="Settings", font=("bahnschrift", 30))
         self.settings_label.grid(row=0, column=0, pady=20, padx=20, columnspan=3)
@@ -412,7 +410,6 @@ class Settings_Window(customtkinter.CTkToplevel):
         pywinstyles.apply_style(PY_YT_DL, style=f"{set_theme}")
         with open(SETTINGS_FILE, "w") as json_file:
             json.dump(data, json_file, indent=4)
-
 
 
 if not os.path.exists(SETTINGS_FILE):
