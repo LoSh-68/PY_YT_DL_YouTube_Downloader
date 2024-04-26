@@ -5,7 +5,6 @@ APPNAME = "PY_YT_DL"
 DOWNLOAD_FOLDER = "PY_YT_DL_DOWNLOADS"
 SETTINGS_FILE = "settings.json"
 
-
 JSON_DATA = [
     {"id": 1, "name": "use_oauth", "content": "False"},
     {"id": 2, "name": "allow_oauth_cache", "content": "False"},
@@ -19,4 +18,11 @@ def get_json_data():
         raise FileNotFoundError(f"Settings file '{SETTINGS_FILE}' not found.")
     with open(SETTINGS_FILE, "r") as file:
         json_data = json.load(file)
-    return json_data
+    return json_data  #
+
+
+def clear_console():
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
