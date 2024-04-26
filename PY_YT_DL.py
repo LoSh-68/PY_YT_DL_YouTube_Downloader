@@ -198,11 +198,11 @@ class PY_YT_DL(customtkinter.CTk):
         self.progressbar_ctk.set(progress)
 
         self.progressbar_label.configure(
-            text=f"{bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB -- {progress * 100:.2f}% complete  @ {download_rate} MB/s")
+            text=f"{bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB -- {progress * 100:.2f}% complete  @ {download_rate:.2f} MB/s")
         print(
             f"{bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB -- {progress * 100:.2f}% complete  @ {download_rate:.2f} MB/s")
         self.title(
-            f"{APPNAME} -- Downloading - {progress * 100:.2f}% complete - {bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB  @ {download_rate} MB/s")
+            f"{APPNAME} -- Downloading - {progress * 100:.2f}% complete - {bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB  @ {download_rate:.2f} MB/s")
         prev_net_io = net_io
 
     def load_infos(self):
