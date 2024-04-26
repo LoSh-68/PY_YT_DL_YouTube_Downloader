@@ -1,3 +1,4 @@
+import pytube.helpers
 from pytube import YouTube
 import os
 import requests
@@ -6,17 +7,19 @@ from io import BytesIO
 import threading
 import customtkinter
 from CTkMessagebox import CTkMessagebox
-import re
 from vars_defs import APPNAME, DOWNLOAD_FOLDER, JSON_DATA, SETTINGS_FILE, get_json_data
 import pywinstyles
 import tkinterDnD
 import json
 import winsound
+import psutil
 
 customtkinter.set_ctk_parent_class(tkinterDnD.Tk)
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
+
+prev_net_io = psutil.net_io_counters()
 
 
 class PY_YT_DL(customtkinter.CTk):
@@ -112,6 +115,7 @@ class PY_YT_DL(customtkinter.CTk):
                 yt = YouTube(url, on_progress_callback=self.progressbar, use_oauth=use_oauth_bool,
                              allow_oauth_cache=oauth_cache_bool)
                 title = yt.title
+                title_file_safe = self.safe_filename(title)
 
                 info_text = (
                     f"Title:\n    {title}\n\n"
@@ -135,31 +139,39 @@ class PY_YT_DL(customtkinter.CTk):
                     video = yt.streams.filter(progressive=True, file_extension='mp4').order_by(
                         'resolution').desc().first()
                     download_path = os.path.join(os.getcwd(), DOWNLOAD_FOLDER)
-                    file_path = os.path.join(download_path, title + ".mp4")
+                    file_path = os.path.join(download_path, title_file_safe + ".mp4")
 
                     if os.path.exists(file_path):
                         CTkMessagebox(title=f"{APPNAME} - Info", message=f"Info\n{title}.mp4 already exists.")
                         return
                     if win_sound == "True":
                         video.download(download_path)
+                        print(f"Finished -- Downloading / {title}")
+                        self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
                         winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
                     else:
                         video.download(download_path)
+                        print(f"Finished -- Downloading / {title}")
+                        self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
 
                 if self.mp3_mp4_combobox_var.get() == "MP3":
-                    mp3_titel = title + ".mp3"
+                    mp3_titel = title_file_safe + ".mp3"
                     audio = yt.streams.filter(only_audio=True).first()
                     download_path = os.path.join(os.getcwd(), DOWNLOAD_FOLDER)
-                    file_path = os.path.join(download_path, title + ".mp3")
+                    file_path = os.path.join(download_path, mp3_titel)
 
                     if os.path.exists(file_path):
                         CTkMessagebox(title=f"{APPNAME} - Info", message=f"Info\n{title}.mp3 already exists.")
                         return
                     if win_sound == "True":
                         audio.download(output_path=download_path, filename=mp3_titel)
+                        self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
+                        print(f"Finished -- Downloading / {title}")
                         winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
                     else:
                         audio.download(output_path=download_path, filename=mp3_titel)
+                        self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
+                        print(f"Finished -- Downloading / {title}")
 
             except Exception as e:
                 CTkMessagebox(title=f"{APPNAME} - Error", message=f"Error:\n"
@@ -170,6 +182,13 @@ class PY_YT_DL(customtkinter.CTk):
         thread.start()
 
     def progressbar(self, stream, chunk, bytes_remaining):
+        global prev_net_io
+        net_io = psutil.net_io_counters()
+
+        download_rate_kb = (net_io.bytes_recv - prev_net_io.bytes_recv) / 1024
+
+        download_rate = download_rate_kb / 1024
+
         total_size = stream.filesize
         bytes_downloaded = total_size - bytes_remaining
         progress_decimal = bytes_downloaded / total_size
@@ -179,9 +198,12 @@ class PY_YT_DL(customtkinter.CTk):
         self.progressbar_ctk.set(progress)
 
         self.progressbar_label.configure(
-            text=f"{bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB -- {progress * 100:.2f}% complete")
+            text=f"{bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB -- {progress * 100:.2f}% complete  @ {download_rate} MB/s")
+        print(
+            f"{bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB -- {progress * 100:.2f}% complete  @ {download_rate:.2f} MB/s")
         self.title(
-            f"{APPNAME} -- Downloading - {progress * 100:.2f}% complete - {bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB")
+            f"{APPNAME} -- Downloading - {progress * 100:.2f}% complete - {bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB  @ {download_rate} MB/s")
+        prev_net_io = net_io
 
     def load_infos(self):
         def msg_box():
@@ -247,7 +269,7 @@ class PY_YT_DL(customtkinter.CTk):
             msg_box_error()
 
     def safe_filename(self, title):
-        return re.sub(r'[^\w\s]', '_', title)
+        return pytube.helpers.safe_filename(title)
 
     def safe_thumbnail(self):
         def msg_box():
@@ -315,7 +337,6 @@ class Settings_Window(customtkinter.CTkToplevel):
         self.use_oauth_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame, values=["False", "True"],
                                                             corner_radius=20)
         self.use_oauth_combobox.grid(pady=20, padx=20, row=0, column=1)
-        self.use_oauth_combobox.set("False")
 
         self.allow_oauth_cache_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="OAUTH Cache:",
                                                               font=("bahnschrift", 15))
@@ -324,7 +345,6 @@ class Settings_Window(customtkinter.CTkToplevel):
         self.allow_oauth_cache_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame,
                                                                     values=["False", "True"], corner_radius=20)
         self.allow_oauth_cache_combobox.grid(pady=20, padx=20, row=1, column=1)
-        self.allow_oauth_cache_combobox.set("False")
 
         self.win_sound_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="Win Sound",
                                                       font=("bahnschrift", 15))
@@ -333,7 +353,6 @@ class Settings_Window(customtkinter.CTkToplevel):
         self.win_sound_combobox = customtkinter.CTkComboBox(self.miscellaneous_settings_frame, values=["False", "True"],
                                                             corner_radius=20)
         self.win_sound_combobox.grid(pady=20, padx=20, row=2, column=1)
-        self.win_sound_combobox.set("False")
 
         self.theme_label = customtkinter.CTkLabel(self.miscellaneous_settings_frame, text="Theme:",
                                                   font=("bahnschrift", 15))
