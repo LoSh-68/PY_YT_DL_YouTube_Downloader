@@ -1,4 +1,4 @@
-# PY_YT_DL
+# ✨ PY_YT_DL
 ![yt_logo_light_blue](https://github.com/LoSh-68/PY_YT_DL/assets/167639498/2b9f0780-94cc-49af-a49e-33ad33689861)
 
 
@@ -7,7 +7,7 @@ PY_YT_DL (python youtube downloader) is a youtube downloader based on pytube.
 I am still working on it, some things are still bugged like the settings and themes for that you may need to restart the app.
 GUI is not final, just testing.
 
-Showcase:
+📝 Showcase:
 
 ![dark_showcase](https://github.com/LoSh-68/PY_YT_DL/assets/167639498/03493220-0cce-4377-8d79-ce13a2aacbb3)
 
@@ -17,7 +17,7 @@ Showcase:
 
 
 
-Used Repositories:
+🌟 Used Repositories:
 
 https://github.com/pytube/pytube
 
