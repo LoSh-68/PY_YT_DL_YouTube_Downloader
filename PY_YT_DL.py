@@ -28,58 +28,105 @@ class PY_YT_DL(customtkinter.CTk):
         self.toplevel_window = None
         self.title(f"{APPNAME}")
         self.wm_iconbitmap("PY_YT_DL.ico")
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(2, weight=1)
+        self.grid_columnconfigure(2, weight=1)
         self.set_settings()
 
         frame = customtkinter.CTkFrame(master=self)
-        frame.grid(row=0, column=0, pady=20, padx=20)
+        frame.grid(row=0, column=0, pady=20, padx=20, columnspan=2)
+
+        frame_url_progress = customtkinter.CTkFrame(master=self, corner_radius=30)
+        frame_url_progress.grid(row=1, column=0, pady=20, padx=20)
+
+        frame_download_load_infos = customtkinter.CTkFrame(master=self, corner_radius=30)
+        frame_download_load_infos.grid(row=2, column=0, pady=20, padx=20)
+
+        frame_titel_textbox = customtkinter.CTkFrame(master=self, corner_radius=30)
+        frame_titel_textbox.grid(row=1, column=1, pady=20, padx=20)
+
+        frame_option_buttons = customtkinter.CTkFrame(master=self, corner_radius=30)
+        frame_option_buttons.grid(row=2, column=1, pady=20, padx=20)
 
         header_image_ctk = customtkinter.CTkImage(dark_image=(Image.open("yt_logo_light_blue.png")), size=(500, 150))
         header_image = customtkinter.CTkLabel(frame, text="")
         header_image.configure(image=header_image_ctk)
         header_image.grid(row=0, column=0, pady=2, padx=2)
 
-        url_label = customtkinter.CTkLabel(frame, text="YouTube URL:", font=("bahnschrift", 20))
+        url_label = customtkinter.CTkLabel(frame_url_progress, text="YouTube URL:", font=("bahnschrift", 20))
         url_label.grid(row=1, column=0, pady=20, padx=20)
 
-        self.url_entry = customtkinter.CTkEntry(frame, width=500)
-        self.url_entry.grid(row=2, column=0, pady=2, padx=2)
+        self.url_entry = customtkinter.CTkEntry(frame_url_progress, width=700, font=("bahnschrift", 15))
+        self.url_entry.grid(row=2, column=0, pady=20, padx=20)
 
-        mp3_mp4_label = customtkinter.CTkLabel(frame, text="MP4 / MP3", font=("bahnschrift", 20))
+        mp3_mp4_label = customtkinter.CTkLabel(frame_download_load_infos, text="Video==MP4 / Audio==MP3",
+                                               font=("bahnschrift", 20))
         mp3_mp4_label.grid(row=3, column=0, pady=20, padx=20)
 
         self.mp3_mp4_combobox_var = customtkinter.StringVar(value=["MP4", "MP3"])
 
-        mp3_mp4_combobox = customtkinter.CTkComboBox(frame, variable=self.mp3_mp4_combobox_var, values=["MP4", "MP3"])
+        mp3_mp4_combobox = customtkinter.CTkComboBox(frame_download_load_infos, variable=self.mp3_mp4_combobox_var,
+                                                     values=["MP4", "MP3"])
         mp3_mp4_combobox.grid(row=4, column=0, pady=2, padx=2)
         self.mp3_mp4_combobox_var.set("MP4")
 
-        download_button = customtkinter.CTkButton(frame, text="Download", command=self.download_video_audio)
-        download_button.grid(row=5, column=0, pady=20, padx=20)
+        self.download_button = customtkinter.CTkButton(frame_download_load_infos, text="Download",
+                                                       command=self.download_video_audio)
+        self.download_button.grid(row=5, column=0, pady=20, padx=20)
 
-        load_button = customtkinter.CTkButton(frame, text="Load Infos", command=self.load_infos)
-        load_button.grid(row=6, column=0)
+        self.load_button = customtkinter.CTkButton(frame_download_load_infos, text="Load Infos",
+                                                   command=self.load_infos)
+        self.load_button.grid(row=6, column=0, pady=20, padx=20)
 
-        self.thumbnail_label = customtkinter.CTkLabel(frame, width=100, height=100, text="")
-        self.thumbnail_label.grid(row=1, column=1, pady=2, padx=2)
+        self.thumbnail_label = customtkinter.CTkLabel(frame_titel_textbox, width=100, height=100, text="")
+        self.thumbnail_label.grid(row=2, column=1, pady=2, padx=2)
 
-        export_button = customtkinter.CTkButton(frame, text="Export as TXT", command=self.export_text)
-        export_button.grid(row=3, column=1, pady=20, padx=20)
+        buttons_frame_label = customtkinter.CTkLabel(frame_option_buttons, text="Miscellaneous",
+                                                     font=("bahnschrift", 20))
+        buttons_frame_label.grid(row=0, column=0, pady=20, padx=20)
 
-        self.info_textbox = customtkinter.CTkTextbox(frame, width=300, height=200)
-        self.info_textbox.grid(row=2, column=1, pady=10, padx=10)
+        export_button = customtkinter.CTkButton(frame_option_buttons, text="Export info as TXT",
+                                                command=self.export_text)
+        export_button.grid(row=1, column=0, pady=10, padx=10)
 
-        self.progressbar_ctk = customtkinter.CTkProgressBar(frame, width=500)
+        self.titel_label_text = customtkinter.CTkLabel(frame_titel_textbox, text="Titel:", font=("bahnschrift", 15))
+        self.titel_label_text.grid(row=1, column=0, pady=20, padx=20)
+
+        self.titel_label = customtkinter.CTkLabel(frame_titel_textbox, text="", font=("bahnschrift", 15))
+        self.titel_label.grid(row=1, column=1, pady=20, padx=20)
+
+        self.info_textbox_label = customtkinter.CTkLabel(frame_titel_textbox, text="Infos:", font=("bahnschrift", 15))
+        self.info_textbox_label.grid(row=3, column=0, pady=20, padx=20)
+
+        self.thumbnail_label_text = customtkinter.CTkLabel(frame_titel_textbox, text="Thumbnail:",
+                                                           font=("bahnschrift", 15))
+        self.thumbnail_label_text.grid(row=2, column=0, pady=20, padx=20)
+
+        self.info_textbox = customtkinter.CTkTextbox(frame_titel_textbox, width=300, height=200)
+        self.info_textbox.grid(row=3, column=1, pady=10, padx=10)
+
+        self.progressbar_ctk = customtkinter.CTkProgressBar(frame_url_progress, width=500)
         self.progressbar_ctk.grid(row=17, column=0, pady=10, padx=10)
         self.progressbar_ctk.set(0)
 
-        self.progressbar_label = customtkinter.CTkLabel(frame, font=("bahnschrift", 15), text="")
+        self.progressbar_label = customtkinter.CTkLabel(frame_url_progress, font=("bahnschrift", 15),
+                                                        text="⬆️ Enter a YT or YT-Music URL and start downloading")
         self.progressbar_label.grid(row=16, column=0, pady=2, padx=2)
 
-        thumbnail_safe_button = customtkinter.CTkButton(frame, text="Safe Thumbnail", command=self.safe_thumbnail)
-        thumbnail_safe_button.grid(row=4, column=1, pady=20, padx=20)
+        thumbnail_safe_button = customtkinter.CTkButton(frame_option_buttons, text="Safe Thumbnail",
+                                                        command=self.safe_thumbnail)
+        thumbnail_safe_button.grid(row=2, column=0, pady=10, padx=10)
 
-        self.settings_button = customtkinter.CTkButton(frame, text="Settings", command=self.open_toplevel)
-        self.settings_button.grid(row=5, column=1)
+        self.settings_button = customtkinter.CTkButton(frame_option_buttons, text="Settings",
+                                                       command=self.open_toplevel)
+        self.settings_button.grid(row=5, column=0, pady=10, padx=10)
+
+        self.download_folder_button = customtkinter.CTkButton(frame_option_buttons, text="Open Download Folder",
+                                                              command=self.open_download_folder)
+        self.download_folder_button.grid(pady=10, padx=10, row=4, column=0)
 
     def open_toplevel(self):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
@@ -102,6 +149,7 @@ class PY_YT_DL(customtkinter.CTk):
 
             try:
                 data = get_json_data()
+                self.download_button.configure(state="disabled")
                 for item in data:
                     if item["id"] == 1:
                         use_oauth_bool = item["content"].lower() == "true"
@@ -145,11 +193,13 @@ class PY_YT_DL(customtkinter.CTk):
                         CTkMessagebox(title=f"{APPNAME} - Info", message=f"Info\n{title}.mp4 already exists.")
                         return
                     if win_sound == "True":
+                        self.titel_label.configure(text=f"{title}")
                         video.download(download_path)
                         print(f"Finished -- Downloading / {title}")
                         self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
                         winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
                     else:
+                        self.titel_label.configure(text=f"{title}")
                         video.download(download_path)
                         print(f"Finished -- Downloading / {title}")
                         self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
@@ -164,19 +214,24 @@ class PY_YT_DL(customtkinter.CTk):
                         CTkMessagebox(title=f"{APPNAME} - Info", message=f"Info\n{title}.mp3 already exists.")
                         return
                     if win_sound == "True":
+                        self.titel_label.configure(text=f"{title}")
                         audio.download(output_path=download_path, filename=mp3_titel)
                         self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
                         print(f"Finished -- Downloading / {title}")
                         winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
                     else:
+                        self.titel_label.configure(text=f"{title}")
                         audio.download(output_path=download_path, filename=mp3_titel)
                         self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
                         print(f"Finished -- Downloading / {title}")
+
 
             except Exception as e:
                 CTkMessagebox(title=f"{APPNAME} - Error", message=f"Error:\n"
                                                                   f"{e}")
                 print(e)
+            finally:
+                self.download_button.configure(state="normal")
 
         thread = threading.Thread(target=download)
         thread.start()
@@ -213,28 +268,40 @@ class PY_YT_DL(customtkinter.CTk):
         if url == "":
             msg_box()
         else:
-            yt = YouTube(url)
-            title = yt.title
-            description = yt.description
-            if description is None:
-                description = "No description available."
+            try:
+                yt = YouTube(url)
+                title = yt.title
+                description = yt.description
+                self.load_button.configure(state="disabled")
+                print(f"Loading: {title}")
 
-            info_text = (
-                f"Title:\n    {title}\n\n"
-                f"Length:\n    {yt.length} seconds\n\n"
-                f"Views:\n    {yt.views}\n\n"
-                f"Age restricted:\n    {'Yes' if yt.age_restricted else 'No'}\n\n"
-                f"Description:\n    {description.replace('\n', '\n    ')}\n"
-            )
+                if description is None:
+                    description = "No description available."
 
-            self.info_textbox.delete(1.0, customtkinter.END)
-            self.info_textbox.insert(customtkinter.END, info_text)
+                info_text = (
+                    f"Title:\n    {title}\n\n"
+                    f"Length:\n    {yt.length} seconds\n\n"
+                    f"Views:\n    {yt.views}\n\n"
+                    f"Age restricted:\n    {'Yes' if yt.age_restricted else 'No'}\n\n"
+                    f"Description:\n    {description.replace('\n', '\n    ')}\n"
+                )
 
-            thumbnail_url = yt.thumbnail_url
-            response = requests.get(thumbnail_url)
-            image_data = response.content
-            ctk_image = customtkinter.CTkImage(dark_image=Image.open(BytesIO(image_data)), size=(200, 200))
-            self.thumbnail_label.configure(image=ctk_image)
+                self.info_textbox.delete(1.0, customtkinter.END)
+                self.info_textbox.insert(customtkinter.END, info_text)
+
+                thumbnail_url = yt.thumbnail_url
+                response = requests.get(thumbnail_url)
+                image_data = response.content
+                ctk_image = customtkinter.CTkImage(dark_image=Image.open(BytesIO(image_data)), size=(200, 200))
+                self.thumbnail_label.configure(image=ctk_image)
+                self.titel_label.configure(text=f"{title}")
+            except Exception as e:
+                CTkMessagebox(title=f"{APPNAME} - Error", message=f"Error:\n"
+                                                                  f"{e}")
+                print(e)
+            finally:
+                self.load_button.configure(state="normal")
+                print(f"Finished loading: {title}")
 
     def export_text(self):
         def msg_box_success():
@@ -314,6 +381,15 @@ class PY_YT_DL(customtkinter.CTk):
                 set_theme = item["content"]
                 break
         pywinstyles.apply_style(PY_YT_DL, style=f"{set_theme}")
+
+    def open_download_folder(self):
+        downlaod_folder = os.path.join(os.getcwd(), DOWNLOAD_FOLDER)
+        try:
+            os.startfile(downlaod_folder)
+        except Exception as e:
+            CTkMessagebox(title=f"{APPNAME} - Error", message=f"Failed to open {downlaod_folder}\n"
+                                                              f"{e}")
+            print(e)
 
 
 class Settings_Window(customtkinter.CTkToplevel):
