@@ -4,7 +4,7 @@
 
 PY_YT_DL (python youtube downloader) is a youtube downloader based on pytube.
 
-I am still working on it, some things are still bugged like the settings and themes for that you may need to restart the app.
+I am still working on it, themes is a bit buggy you may need to restart the app.
 GUI is not final, just testing.
 
 📝 Showcase:
