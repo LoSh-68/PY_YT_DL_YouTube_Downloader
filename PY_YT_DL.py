@@ -22,8 +22,6 @@ customtkinter.set_default_color_theme("blue")
 
 prev_net_io = psutil.net_io_counters()
 
-YT_URL_TITEL = ()
-
 
 class PY_YT_DL(customtkinter.CTk):
     def __init__(self, *args, **kwargs):
