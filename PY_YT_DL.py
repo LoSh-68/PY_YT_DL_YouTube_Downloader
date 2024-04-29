@@ -7,12 +7,13 @@ from io import BytesIO
 import threading
 import customtkinter
 from CTkMessagebox import CTkMessagebox
-from vars_defs import APPNAME, DOWNLOAD_FOLDER, JSON_DATA, SETTINGS_FILE, get_json_data
+from vars_defs import APPNAME, DOWNLOAD_FOLDER, JSON_DATA, SETTINGS_FILE, get_json_data, welcome_messsage, clear_console
 import pywinstyles
 import tkinterDnD
 import json
 import winsound
 import psutil
+from colorama import Fore, Back, Style
 
 customtkinter.set_ctk_parent_class(tkinterDnD.Tk)
 
@@ -20,6 +21,8 @@ customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("blue")
 
 prev_net_io = psutil.net_io_counters()
+
+YT_URL_TITEL = ()
 
 
 class PY_YT_DL(customtkinter.CTk):
@@ -35,6 +38,7 @@ class PY_YT_DL(customtkinter.CTk):
         self.grid_rowconfigure(2, weight=1)
         self.grid_columnconfigure(2, weight=1)
         self.set_settings()
+        welcome_messsage()
 
         frame = customtkinter.CTkFrame(master=self)
         frame.grid(row=0, column=0, pady=20, padx=20, columnspan=2)
@@ -73,11 +77,11 @@ class PY_YT_DL(customtkinter.CTk):
         mp3_mp4_combobox.grid(row=4, column=0, pady=2, padx=2)
         self.mp3_mp4_combobox_var.set("MP4")
 
-        self.download_button = customtkinter.CTkButton(frame_download_load_infos, text="Download",
+        self.download_button = customtkinter.CTkButton(frame_download_load_infos, text="⏬ Download",
                                                        command=self.download_video_audio)
         self.download_button.grid(row=5, column=0, pady=20, padx=20)
 
-        self.load_button = customtkinter.CTkButton(frame_download_load_infos, text="Load Infos",
+        self.load_button = customtkinter.CTkButton(frame_download_load_infos, text="🔄️ Load Infos",
                                                    command=self.load_infos)
         self.load_button.grid(row=6, column=0, pady=20, padx=20)
 
@@ -88,7 +92,7 @@ class PY_YT_DL(customtkinter.CTk):
                                                      font=("bahnschrift", 20))
         buttons_frame_label.grid(row=0, column=0, pady=20, padx=20)
 
-        export_button = customtkinter.CTkButton(frame_option_buttons, text="Export info as TXT",
+        export_button = customtkinter.CTkButton(frame_option_buttons, text="📝 Export info as TXT",
                                                 command=self.export_text)
         export_button.grid(row=1, column=0, pady=10, padx=10)
 
@@ -116,17 +120,21 @@ class PY_YT_DL(customtkinter.CTk):
                                                         text="⬆️ Enter a YT or YT-Music URL and start downloading")
         self.progressbar_label.grid(row=16, column=0, pady=2, padx=2)
 
-        thumbnail_safe_button = customtkinter.CTkButton(frame_option_buttons, text="Safe Thumbnail",
+        thumbnail_safe_button = customtkinter.CTkButton(frame_option_buttons, text="🖼️Safe Thumbnail",
                                                         command=self.safe_thumbnail)
         thumbnail_safe_button.grid(row=2, column=0, pady=10, padx=10)
 
-        self.settings_button = customtkinter.CTkButton(frame_option_buttons, text="Settings",
+        self.settings_button = customtkinter.CTkButton(frame_option_buttons, text="⚙️ Settings",
                                                        command=self.open_toplevel)
         self.settings_button.grid(row=5, column=0, pady=10, padx=10)
 
-        self.download_folder_button = customtkinter.CTkButton(frame_option_buttons, text="Open Download Folder",
+        self.download_folder_button = customtkinter.CTkButton(frame_option_buttons, text="📂 Open Download Folder",
                                                               command=self.open_download_folder)
         self.download_folder_button.grid(pady=10, padx=10, row=4, column=0)
+
+        self.console_clear_button = customtkinter.CTkButton(frame_option_buttons, text="❌ Clear Console",
+                                                            command=clear_console)
+        self.console_clear_button.grid(row=6, pady=10, padx=10)
 
     def open_toplevel(self):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
@@ -195,13 +203,13 @@ class PY_YT_DL(customtkinter.CTk):
                     if win_sound == "True":
                         self.titel_label.configure(text=f"{title}")
                         video.download(download_path)
-                        print(f"Finished -- Downloading / {title}")
+                        print(Fore.BLACK + Back.LIGHTBLUE_EX + f"Finished ✔️ -- Downloading / {title}")
                         self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
                         winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
                     else:
                         self.titel_label.configure(text=f"{title}")
                         video.download(download_path)
-                        print(f"Finished -- Downloading / {title}")
+                        print(Fore.BLACK + Back.LIGHTBLUE_EX + f"Finished ✔️ -- Downloading / {title}")
                         self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
 
                 if self.mp3_mp4_combobox_var.get() == "MP3":
@@ -217,19 +225,19 @@ class PY_YT_DL(customtkinter.CTk):
                         self.titel_label.configure(text=f"{title}")
                         audio.download(output_path=download_path, filename=mp3_titel)
                         self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
-                        print(f"Finished -- Downloading / {title}")
+                        print(Fore.BLACK + Back.LIGHTBLUE_EX + f"Finished ✔️ -- Downloading / {title}")
                         winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
                     else:
                         self.titel_label.configure(text=f"{title}")
                         audio.download(output_path=download_path, filename=mp3_titel)
                         self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
-                        print(f"Finished -- Downloading / {title}")
+                        print(Fore.BLACK + Back.LIGHTBLUE_EX + f"Finished ✔️ -- Downloading / {title}")
 
 
             except Exception as e:
                 CTkMessagebox(title=f"{APPNAME} - Error", message=f"Error:\n"
                                                                   f"{e}")
-                print(e)
+                print(Fore.BLACK + Back.LIGHTRED_EX + f"‼️ Error: {e}")
             finally:
                 self.download_button.configure(state="normal")
 
@@ -254,8 +262,8 @@ class PY_YT_DL(customtkinter.CTk):
 
         self.progressbar_label.configure(
             text=f"{bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB -- {progress * 100:.2f}% complete  @ {download_rate:.2f} MB/s")
-        print(
-            f"{bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB -- {progress * 100:.2f}% complete  @ {download_rate:.2f} MB/s")
+        print(Fore.BLACK + Back.LIGHTGREEN_EX +
+              f"Downloading -- {bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB -- {progress * 100:.2f}% complete  @ {download_rate:.2f} MB/s")
         self.title(
             f"{APPNAME} -- Downloading - {progress * 100:.2f}% complete - {bytes_downloaded / (1024 * 1024):.2f} MB / {total_size / (1024 * 1024):.2f} MB  @ {download_rate:.2f} MB/s")
         prev_net_io = net_io
@@ -273,7 +281,7 @@ class PY_YT_DL(customtkinter.CTk):
                 title = yt.title
                 description = yt.description
                 self.load_button.configure(state="disabled")
-                print(f"Loading: {title}")
+                print(Fore.BLACK + Back.LIGHTBLUE_EX + f"Loading: {title}")
 
                 if description is None:
                     description = "No description available."
@@ -298,10 +306,10 @@ class PY_YT_DL(customtkinter.CTk):
             except Exception as e:
                 CTkMessagebox(title=f"{APPNAME} - Error", message=f"Error:\n"
                                                                   f"{e}")
-                print(e)
+                print(Fore.BLACK + Back.LIGHTRED_EX + f"‼️ Error: {e}")
             finally:
                 self.load_button.configure(state="normal")
-                print(f"Finished loading: {title}")
+                print(Fore.BLACK + Back.LIGHTGREEN_EX + f"Finished loading: {title}")
 
     def export_text(self):
         def msg_box_success():
@@ -331,8 +339,9 @@ class PY_YT_DL(customtkinter.CTk):
             with open(filepath, "w") as file:
                 file.write(text)
             msg_box_success()
+            print(Fore.BLACK + Back.LIGHTGREEN_EX + f"TXT safed as {filename}")
         except Exception as e:
-            print(e)
+            print(Fore.BLACK + Back.LIGHTRED_EX + f"‼️ Error: {e}")
             msg_box_error()
 
     def safe_filename(self, title):
@@ -369,10 +378,11 @@ class PY_YT_DL(customtkinter.CTk):
 
             with open(filepath, "wb") as file:
                 file.write(image_data)
+                print(Fore.BLACK + Back.LIGHTGREEN_EX + f"File saved as {filename}")
                 msg_box_success()
 
         except Exception as e:
-            print(f"Error: {e}")
+            print(Fore.BLACK + Back.LIGHTRED_EX + f"‼️ Error: {e}")
 
     def set_settings(self):
         json_data = get_json_data()
@@ -389,7 +399,7 @@ class PY_YT_DL(customtkinter.CTk):
         except Exception as e:
             CTkMessagebox(title=f"{APPNAME} - Error", message=f"Failed to open {downlaod_folder}\n"
                                                               f"{e}")
-            print(e)
+            print(Fore.BLACK + Back.LIGHTRED_EX + f"‼️ Error: {e}")
 
 
 class Settings_Window(customtkinter.CTkToplevel):
