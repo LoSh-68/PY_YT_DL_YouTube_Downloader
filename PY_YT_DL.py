@@ -1,3 +1,4 @@
+import io
 import pytube.helpers
 from pytube import YouTube
 import os
@@ -14,6 +15,8 @@ import json
 import winsound
 import psutil
 from colorama import Fore, Back, Style
+from images_base64 import PY_YT_DL_ICO_BASE64, YT_LOGO_LIGHT_BLUE_BASE64
+import base64
 
 customtkinter.set_ctk_parent_class(tkinterDnD.Tk)
 
@@ -22,13 +25,30 @@ customtkinter.set_default_color_theme("blue")
 
 prev_net_io = psutil.net_io_counters()
 
+PY_YT_DL_ICO_BASE_64 = PY_YT_DL_ICO_BASE64
+PY_YT_DL_ICO_BASE_64_DATA = base64.b64decode(PY_YT_DL_ICO_BASE_64)
+PY_YT_DL_ICO_BASE_64_STREAM = io.BytesIO(PY_YT_DL_ICO_BASE_64_DATA)
+PY_YT_DL_ICO_IMAGE = Image.open(PY_YT_DL_ICO_BASE_64_STREAM)
+PY_YT_DL_ICO_IMAGE_TEMP_PATH = "TEMP_PY_YT_DL.ico"
+PY_YT_DL_ICO_IMAGE.save(PY_YT_DL_ICO_IMAGE_TEMP_PATH)
+
+PY_YT_DL_YT_LOGO_BASE_64 = YT_LOGO_LIGHT_BLUE_BASE64
+PY_YT_DL_YT_LOGO_BASE_64_DATA = base64.b64decode(PY_YT_DL_YT_LOGO_BASE_64)
+PY_YT_DL_YT_LOGO_BASE_64_STREAM = io.BytesIO(PY_YT_DL_YT_LOGO_BASE_64_DATA)
+PY_YT_DL_YT_LOGO_IMAGE = Image.open(PY_YT_DL_YT_LOGO_BASE_64_STREAM)
+PY_YT_DL_YT_LOGO_IMAGE_TEMP_PATH = "TEMP_YT_LOGO_LIGHT_BLUE.png"
+PY_YT_DL_YT_LOGO_IMAGE.save(PY_YT_DL_YT_LOGO_IMAGE_TEMP_PATH)
+
+
+
 
 class PY_YT_DL(customtkinter.CTk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.toplevel_window = None
         self.title(f"{APPNAME}")
-        self.wm_iconbitmap("PY_YT_DL.ico")
+        self.wm_iconbitmap(PY_YT_DL_ICO_IMAGE_TEMP_PATH)
+        os.remove(PY_YT_DL_ICO_IMAGE_TEMP_PATH)
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
@@ -53,10 +73,11 @@ class PY_YT_DL(customtkinter.CTk):
         frame_option_buttons = customtkinter.CTkFrame(master=self, corner_radius=30)
         frame_option_buttons.grid(row=2, column=1, pady=20, padx=20)
 
-        header_image_ctk = customtkinter.CTkImage(dark_image=(Image.open("yt_logo_light_blue.png")), size=(500, 150))
+        header_image_ctk = customtkinter.CTkImage(dark_image=(Image.open(PY_YT_DL_YT_LOGO_IMAGE_TEMP_PATH)), size=(500, 150))
         header_image = customtkinter.CTkLabel(frame, text="")
         header_image.configure(image=header_image_ctk)
         header_image.grid(row=0, column=0, pady=2, padx=2)
+        os.remove(PY_YT_DL_YT_LOGO_IMAGE_TEMP_PATH)
 
         url_label = customtkinter.CTkLabel(frame_url_progress, text="YouTube URL:", font=("bahnschrift", 20))
         url_label.grid(row=1, column=0, pady=20, padx=20)
@@ -404,8 +425,6 @@ class Settings_Window(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs, ):
         super().__init__(*args, **kwargs)
         self.title(f"{APPNAME} - Settings")
-        self.wm_iconbitmap("PY_YT_DL.ico")
-
         self.wm_protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.settings_label = customtkinter.CTkLabel(self, text="Settings", font=("bahnschrift", 30))
