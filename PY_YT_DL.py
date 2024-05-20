@@ -2,17 +2,20 @@ import base64
 import json
 import threading
 from io import BytesIO
+import io
+import os
 import customtkinter
 import psutil
 import pytube.helpers
 import pywinstyles
 import requests
 import tkinterDnD
+from PIL import Image
 import winsound
 from CTkMessagebox import CTkMessagebox
 from colorama import Fore, Back
 from pytube import YouTube, Playlist
-from ctk_components import *
+from ctk_components import CTkLoader
 from images_base64 import PY_YT_DL_ICO_BASE64, YT_LOGO_LIGHT_BLUE_BASE64
 from vars_defs import APPNAME, DOWNLOAD_FOLDER, JSON_DATA, SETTINGS_FILE, get_json_data, welcome_messsage, clear_console
 
@@ -199,7 +202,7 @@ class PY_YT_DL(customtkinter.CTk):
             if hasattr(self, 'playlist_title_label'):
                 self.playlist_title_label.configure(text=f"Playlist Title: {playlist_title}")
             else:
-                self.playlist_title_label = ctk.CTkLabel(self.frame_playlist, text=f"Playlist Title: {playlist_title}")
+                self.playlist_title_label = customtkinter.CTkLabel(self.frame_playlist, text=f"Playlist Title: {playlist_title}")
                 self.playlist_title_label.grid(row=0, column=0)
 
             self.video_entries = []
@@ -223,31 +226,31 @@ class PY_YT_DL(customtkinter.CTk):
                     response = requests.get(thumbnail_url)
                     response.raise_for_status()
                     image_data = response.content
-                    ctk_image = ctk.CTkImage(dark_image=Image.open(BytesIO(image_data)), size=(110, 110))
+                    ctk_image = customtkinter.CTkImage(dark_image=Image.open(BytesIO(image_data)), size=(110, 110))
 
-                    video_title_label = ctk.CTkLabel(self.playlist_scrollableframe, text=video_title)
+                    video_title_label = customtkinter.CTkLabel(self.playlist_scrollableframe, text=video_title)
                     video_title_label.grid(row=index, column=4, pady=5, padx=5)
 
-                    video_nr_label = ctk.CTkLabel(self.playlist_scrollableframe, text=f"{index}")
+                    video_nr_label = customtkinter.CTkLabel(self.playlist_scrollableframe, text=f"{index}")
                     video_nr_label.grid(row=index, column=1, pady=5, padx=5)
 
-                    checkmark = ctk.CTkCheckBox(self.playlist_scrollableframe, text="")
+                    checkmark = customtkinter.CTkCheckBox(self.playlist_scrollableframe, text="")
                     checkmark.grid(row=index, column=2, pady=5, padx=5)
 
-                    thumbnail_label = ctk.CTkLabel(self.playlist_scrollableframe, image=ctk_image, text="")
+                    thumbnail_label = customtkinter.CTkLabel(self.playlist_scrollableframe, image=ctk_image, text="")
                     thumbnail_label.grid(row=index, column=3, pady=5, padx=5)
 
-                    download_button_mp4 = ctk.CTkButton(self.playlist_scrollableframe, text="Download / mp4",
+                    download_button_mp4 = customtkinter.CTkButton(self.playlist_scrollableframe, text="Download / mp4",
                                                         corner_radius=30,
                                                         command=lambda ytt=yt: self.start_download_video(ytt, 'mp4'))
                     download_button_mp4.grid(row=index, column=5, pady=5, padx=5)
 
-                    download_button_mp3 = ctk.CTkButton(self.playlist_scrollableframe, text="Download / mp3",
+                    download_button_mp3 = customtkinter.CTkButton(self.playlist_scrollableframe, text="Download / mp3",
                                                         corner_radius=30,
                                                         command=lambda ytt=yt: self.start_download_video(ytt, 'mp3'))
                     download_button_mp3.grid(row=index, column=6, pady=5, padx=5)
 
-                    download_thumbnail_button = ctk.CTkButton(self.playlist_scrollableframe, text="Download Thumbnail",
+                    download_thumbnail_button = customtkinter.CTkButton(self.playlist_scrollableframe, text="Download Thumbnail",
                                                               corner_radius=30)
                     download_thumbnail_button.grid(row=index, column=7, pady=5, padx=5)
 
