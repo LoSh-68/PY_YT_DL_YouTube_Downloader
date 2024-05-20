@@ -25,3 +25,7 @@ https://github.com/TomSchimansky/CustomTkinter
 https://github.com/Akascape/CTkMessagebox
 
 https://github.com/Akascape/py-window-styles
+
+https://github.com/rudymohammadbali/ctk_components
+
+https://github.com/Akascape/tkinter-toolkit
