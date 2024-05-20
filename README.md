@@ -12,7 +12,9 @@ GUI is not final, just testing.
 
 ![Screenshot 2024-05-20 102923](https://github.com/LoSh-68/PY_YT_DL_YouTube_Downloader/assets/167639498/09443739-a202-40bf-957b-7824c1398b2b)
 
-![settings_showcase](https://github.com/LoSh-68/PY_YT_DL/assets/167639498/92145a84-ceba-4cf5-9ffc-6444fb4166bb)
+![Screenshot 2024-05-20 103444](https://github.com/LoSh-68/PY_YT_DL_YouTube_Downloader/assets/167639498/111bb294-56d2-4c83-9e71-e5487f06a9c0)
+
+![Screenshot 2024-05-20 103500](https://github.com/LoSh-68/PY_YT_DL_YouTube_Downloader/assets/167639498/162efb81-3b7d-44c9-a237-d55098a654ad)
 
 
 
