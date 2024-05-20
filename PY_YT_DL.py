@@ -21,9 +21,6 @@ from vars_defs import APPNAME, DOWNLOAD_FOLDER, JSON_DATA, SETTINGS_FILE, get_js
 
 customtkinter.set_ctk_parent_class(tkinterDnD.Tk)
 
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("blue")
-
 prev_net_io = psutil.net_io_counters()
 
 PY_YT_DL_ICO_BASE_64 = PY_YT_DL_ICO_BASE64
@@ -61,22 +58,22 @@ class PY_YT_DL(customtkinter.CTk):
         frame.grid(row=0, column=0, pady=20, padx=20, sticky="w")
 
         frame_url_progress = customtkinter.CTkFrame(master=self, corner_radius=30)
-        frame_url_progress.grid(row=0, column=1, pady=20, padx=20, sticky="n")
+        frame_url_progress.grid(row=0, column=0, pady=20, padx=20, sticky="e")
 
         frame_download_load_infos = customtkinter.CTkFrame(master=self, corner_radius=30)
-        frame_download_load_infos.grid(row=1, column=1, pady=20, padx=20, sticky="e")
+        frame_download_load_infos.grid(row=1, column=1, pady=20, padx=20, sticky="w")
 
         frame_titel_textbox = customtkinter.CTkFrame(master=self, corner_radius=30)
-        frame_titel_textbox.grid(row=1, column=1, pady=20, padx=20, sticky="w")
+        frame_titel_textbox.grid(row=0, column=1, pady=20, padx=20, sticky="s")
 
         frame_option_buttons = customtkinter.CTkFrame(master=self, corner_radius=30)
-        frame_option_buttons.grid(row=1, column=2, pady=20, padx=20)
+        frame_option_buttons.grid(row=1, column=1, pady=20, padx=20, sticky="e")
 
         self.frame_playlist = customtkinter.CTkFrame(self, corner_radius=30)
         self.frame_playlist.grid(row=1, column=0, pady=20, padx=20)
 
         header_image_ctk = customtkinter.CTkImage(dark_image=(Image.open(PY_YT_DL_YT_LOGO_IMAGE_TEMP_PATH)),
-                                                  size=(500, 150))
+                                                  size=(200, 150))
         header_image = customtkinter.CTkLabel(frame, text="")
         header_image.configure(image=header_image_ctk)
         header_image.grid(row=0, column=0, pady=2, padx=2)
@@ -114,9 +111,9 @@ class PY_YT_DL(customtkinter.CTk):
                                                      font=("bahnschrift", 20))
         buttons_frame_label.grid(row=0, column=0, pady=20, padx=20)
 
-        export_button = customtkinter.CTkButton(frame_option_buttons, text="📝 Export info as TXT",
+        export_button = customtkinter.CTkButton(frame_titel_textbox, text="📝 Export info as TXT",
                                                 command=self.export_text)
-        export_button.grid(row=1, column=0, pady=10, padx=10)
+        export_button.grid(row=4, column=1, pady=10, padx=10)
 
         self.titel_label_text = customtkinter.CTkLabel(frame_titel_textbox, text="Titel:", font=("bahnschrift", 15))
         self.titel_label_text.grid(row=1, column=0, pady=20, padx=20)
@@ -142,9 +139,9 @@ class PY_YT_DL(customtkinter.CTk):
                                                         text="⬆️ Enter a YT or YT-Music (playlist) URL and start downloading")
         self.progressbar_label.grid(row=16, column=0, pady=2, padx=2)
 
-        thumbnail_safe_button = customtkinter.CTkButton(frame_option_buttons, text="🖼️Safe Thumbnail",
+        thumbnail_safe_button = customtkinter.CTkButton(frame_titel_textbox, text="🖼️Safe Thumbnail",
                                                         command=self.safe_thumbnail)
-        thumbnail_safe_button.grid(row=2, column=0, pady=10, padx=10)
+        thumbnail_safe_button.grid(row=4, column=0, pady=10, padx=10)
 
         self.settings_button = customtkinter.CTkButton(frame_option_buttons, text="⚙️ Settings",
                                                        command=self.open_toplevel)
@@ -167,17 +164,19 @@ class PY_YT_DL(customtkinter.CTk):
 
         self.download_playlist_complete_button = customtkinter.CTkButton(self.frame_playlist, text="⏬ Download all",
                                                                          command=self.start_download_all_videos)
-        self.download_playlist_complete_button.grid(row=1, column=0, sticky="e", pady=10, padx=100)
+        self.download_playlist_complete_button.grid(row=2, column=0, sticky="e", pady=10, padx=100)
 
-        self.download_playlist_selected_button = customtkinter.CTkButton(self.frame_playlist, text="⏬ Download selected",
+        self.download_playlist_selected_button = customtkinter.CTkButton(self.frame_playlist,
+                                                                         text="⏬ Download selected",
                                                                          command=self.start_download_selected_videos)
-        self.download_playlist_selected_button.grid(row=1, column=0, sticky="w", pady=10, padx=100)
+        self.download_playlist_selected_button.grid(row=2, column=0, sticky="w", pady=10, padx=100)
 
         self.playlist_download_format_switch = customtkinter.CTkSwitch(self.frame_playlist, text="mp4 / mp3",
                                                                        onvalue="mp3", offvalue="mp4")
         self.playlist_download_format_switch.grid(row=2, column=0)
 
-        self.playlist_info_label = customtkinter.CTkLabel(self.frame_playlist,font=("bahnschrift", 20), text="Load a Playlist by pasting a link in the entry field. And click the load playlist button.")
+        self.playlist_info_label = customtkinter.CTkLabel(self.frame_playlist, font=("bahnschrift", 20),
+                                                          text="Load a Playlist by pasting a link in the entry field. And click the load playlist button.")
         self.playlist_info_label.grid(row=0, column=0)
 
     def load_playlist(self):
@@ -200,10 +199,12 @@ class PY_YT_DL(customtkinter.CTk):
             playlist_title = yt_playlist.title
 
             if hasattr(self, 'playlist_title_label'):
-                self.playlist_title_label.configure(text=f"Playlist Title: {playlist_title}")
+                self.playlist_title_label.configure(text=f"Playlist Title: {playlist_title}", font=("Bahnschrift", 20))
             else:
-                self.playlist_title_label = customtkinter.CTkLabel(self.frame_playlist, text=f"Playlist Title: {playlist_title}")
-                self.playlist_title_label.grid(row=0, column=0)
+                self.playlist_title_label = customtkinter.CTkLabel(self.frame_playlist,
+                                                                   text=f"Playlist Title: {playlist_title}",
+                                                                   font=("Bahnschrift", 20))
+                self.playlist_title_label.grid(row=1, column=0)
 
             self.video_entries = []
 
@@ -241,17 +242,20 @@ class PY_YT_DL(customtkinter.CTk):
                     thumbnail_label.grid(row=index, column=3, pady=5, padx=5)
 
                     download_button_mp4 = customtkinter.CTkButton(self.playlist_scrollableframe, text="Download / mp4",
-                                                        corner_radius=30,
-                                                        command=lambda ytt=yt: self.start_download_video(ytt, 'mp4'))
+                                                                  corner_radius=30,
+                                                                  command=lambda ytt=yt: self.start_download_video(ytt,
+                                                                                                                   'mp4'))
                     download_button_mp4.grid(row=index, column=5, pady=5, padx=5)
 
                     download_button_mp3 = customtkinter.CTkButton(self.playlist_scrollableframe, text="Download / mp3",
-                                                        corner_radius=30,
-                                                        command=lambda ytt=yt: self.start_download_video(ytt, 'mp3'))
+                                                                  corner_radius=30,
+                                                                  command=lambda ytt=yt: self.start_download_video(ytt,
+                                                                                                                   'mp3'))
                     download_button_mp3.grid(row=index, column=6, pady=5, padx=5)
 
-                    download_thumbnail_button = customtkinter.CTkButton(self.playlist_scrollableframe, text="Download Thumbnail",
-                                                              corner_radius=30)
+                    download_thumbnail_button = customtkinter.CTkButton(self.playlist_scrollableframe,
+                                                                        text="Download Thumbnail",
+                                                                        corner_radius=30)
                     download_thumbnail_button.grid(row=index, column=7, pady=5, padx=5)
 
                     self.video_entries.append({
@@ -269,7 +273,6 @@ class PY_YT_DL(customtkinter.CTk):
             print(Fore.BLACK + Back.LIGHTRED_EX + f"An error occurred: {e}")
         finally:
             loader.stop_loader()
-
 
     def download_video(self, ytt, format):
         try:
@@ -321,20 +324,30 @@ class PY_YT_DL(customtkinter.CTk):
                     self.progressbar_label.configure(text=f"Finished -- Downloading / {title}")
                     print(Fore.BLACK + Back.LIGHTBLUE_EX + f"Finished ✔️ -- Downloading / {title}")
         except Exception as e:
-            print(f"An error occurred during download: {e}")
+            CTkMessagebox(title=f"{APPNAME} - Error", message=f"Error:\n"
+                                                              f"{e}")
+            print(Fore.BLACK + Back.LIGHTRED_EX + f"‼️ Error: {e}")
 
     def download_all_videos(self):
         format = self.playlist_download_format_switch.get()
-        for entry in self.video_entries:
-            yt = entry['yt']
-            self.download_video(yt, format)
+        try:
+            for entry in self.video_entries:
+                yt = entry['yt']
+                self.download_video(yt, format)
+        except Exception as e:
+            CTkMessagebox(title=f"{APPNAME}", message=f"Please load a playlist first.", icon="warning")
+            print(Fore.BLACK + Back.LIGHTRED_EX + f"‼️ Error: {e}")
 
     def download_selected_videos(self):
         format = self.playlist_download_format_switch.get()
-        for entry in self.video_entries:
-            if entry['checkmark'].get() == 1:
-                yt = entry['yt']
-                self.download_video(yt, format)
+        try:
+            for entry in self.video_entries:
+                if entry['checkmark'].get() == 1:
+                    yt = entry['yt']
+                    self.download_video(yt, format)
+        except Exception as e:
+            CTkMessagebox(title=f"{APPNAME}", message=f"Please load a playlist first.", icon="warning")
+            print(Fore.BLACK + Back.LIGHTRED_EX + f"‼️ Error: {e}")
 
     def start_download_video(self, yt, format):
         thread = threading.Thread(target=self.download_video, args=(yt, format))
