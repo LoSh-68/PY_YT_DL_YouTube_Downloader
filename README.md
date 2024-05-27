@@ -1,5 +1,5 @@
 # ✨ PY_YT_DL
-![yt_logo_light_blue](https://github.com/LoSh-68/PY_YT_DL/assets/167639498/2b9f0780-94cc-49af-a49e-33ad33689861)
+![yt_logo_light_blue_no_txt](https://github.com/LoSh-68/PY_YT_DL_YouTube_Downloader/assets/167639498/ecb7ad45-b736-45df-95b5-1b86ad90a394)
 
 
 PY_YT_DL (python youtube downloader) is a youtube downloader based on pytube.
@@ -8,11 +8,13 @@ I am still working on it, themes is a bit buggy you may need to restart the app.
 GUI is not final, just testing.
 
 📝 Showcase:
-![Screenshot 2024-04-27 142747](https://github.com/LoSh-68/PY_YT_DL/assets/167639498/184ebe55-40f5-48dd-8b7f-cad62f100d12)
+![Screenshot 2024-05-20 102707](https://github.com/LoSh-68/PY_YT_DL_YouTube_Downloader/assets/167639498/7f705e42-711a-4615-9219-45e1962f850a)
 
-![Screenshot 2024-04-27 142717](https://github.com/LoSh-68/PY_YT_DL/assets/167639498/a4e6df0d-1295-43e7-abaa-c18bd1b877db)
+![Screenshot 2024-05-20 102923](https://github.com/LoSh-68/PY_YT_DL_YouTube_Downloader/assets/167639498/09443739-a202-40bf-957b-7824c1398b2b)
 
-![settings_showcase](https://github.com/LoSh-68/PY_YT_DL/assets/167639498/92145a84-ceba-4cf5-9ffc-6444fb4166bb)
+![Screenshot 2024-05-20 103444](https://github.com/LoSh-68/PY_YT_DL_YouTube_Downloader/assets/167639498/111bb294-56d2-4c83-9e71-e5487f06a9c0)
+
+![Screenshot 2024-05-20 103500](https://github.com/LoSh-68/PY_YT_DL_YouTube_Downloader/assets/167639498/162efb81-3b7d-44c9-a237-d55098a654ad)
 
 
 
