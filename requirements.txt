@@ -1,0 +1,9 @@
+customtkinter~=5.2.2
+pillow~=10.3.0
+future~=1.0.0
+colorama~=0.4.6
+psutil~=5.9.8
+pytube~=15.0.0
+pywinstyles~=1.7
+requests~=2.31.0
+CTkMessagebox~=2.5
